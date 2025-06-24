@@ -1,9 +1,10 @@
 package handler
 
 import (
-	"fmt"
+	"encoding/json"
 
 	"github.com/dropboks/notification-service/internal/domain/service"
+	"github.com/dropboks/sharedlib/dto"
 	"github.com/nats-io/nats.go/jetstream"
 	"github.com/rs/zerolog"
 )
@@ -26,5 +27,13 @@ func NewSubscriberHandler(svc service.SubscriberService, logger zerolog.Logger) 
 }
 
 func (s *subscriberHandler) EmailHandler(msg jetstream.Msg) {
-	fmt.Println(msg)
+	var msgData dto.MailNotificationMessage
+	err := json.Unmarshal(msg.Data(), &msgData)
+	if err != nil {
+		s.logger.Error().Err(err).Msg("error unmarshal")
+		return
+	}
+	if err = s.subsService.SendEmail(msgData); err != nil {
+		s.logger.Error().Err(err).Msg("failed to send email")
+	}
 }
