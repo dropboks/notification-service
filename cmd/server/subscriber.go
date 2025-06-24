@@ -26,6 +26,7 @@ func (s *Subscriber) Run(ctx context.Context) {
 		mq mq.Nats,
 		_mq *nats.Conn,
 	) {
+		defer _mq.Drain()
 		err := mq.CreateOrUpdateNewStream(ctx, &jetstream.StreamConfig{
 			Name:        viper.GetString("jetstream.stream.name"),
 			Description: viper.GetString("jetstream.stream.description"),
@@ -39,14 +40,15 @@ func (s *Subscriber) Run(ctx context.Context) {
 
 		// consumer for email
 		emailCons, err := mq.CreateOrUpdateNewConsumer(ctx, viper.GetString("jetstream.stream.name"), &jetstream.ConsumerConfig{
-			Name:          viper.GetString("jetstream.consumer.email"),
-			Durable:       viper.GetString("jetstream.consumer.email"),
-			FilterSubject: viper.GetString("jetstream.subject.email"),
+			Name:          viper.GetString("jetstream.consumer.mail"),
+			Durable:       viper.GetString("jetstream.consumer.mail"),
+			FilterSubject: viper.GetString("jetstream.subject.mail"),
 			AckPolicy:     jetstream.AckExplicitPolicy,
+			DeliverPolicy: jetstream.DeliverNewPolicy,
 		})
 
 		if err != nil {
-			logger.Fatal().Err(err).Msg("Failed to create or update email consumer")
+			logger.Fatal().Err(err).Msg("Failed to create or update mail consumer")
 		}
 
 		_, err = emailCons.Consume(func(msg jetstream.Msg) {
