@@ -37,13 +37,8 @@ func (s *Subscriber) Run(ctx context.Context) {
 			logger.Fatal().Err(err).Msg("Failed to create or update notification stream")
 		}
 
-		stream, err := js.Stream(ctx, viper.GetString("jetstream.stream.name"))
-		if err != nil {
-			logger.Fatal().Err(err).Msg("failed to get stream")
-		}
-
 		// consumer for email
-		emailCons, err := mq.CreateOrUpdateNewConsumer(ctx, stream, &jetstream.ConsumerConfig{
+		emailCons, err := mq.CreateOrUpdateNewConsumer(ctx, viper.GetString("jetstream.stream.name"), &jetstream.ConsumerConfig{
 			Name:          viper.GetString("jetstream.consumer.email"),
 			Durable:       viper.GetString("jetstream.consumer.email"),
 			FilterSubject: viper.GetString("jetstream.subject.email"),
@@ -73,9 +68,9 @@ func (s *Subscriber) Run(ctx context.Context) {
 			s.ConnectionReady <- true
 		}
 
-		logger.Info().Msg("NATS subscriber is running")
+		logger.Info().Msg("subscriber for notification is running")
 		<-ctx.Done()
-		logger.Info().Msg("Shutting down NATS subscriber")
+		logger.Info().Msg("Shutting down subscriber for notification")
 	})
 	if err != nil {
 		log.Fatalf("failed to initialize application: %v", err)
