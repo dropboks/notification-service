@@ -12,7 +12,7 @@ import (
 type (
 	Mail interface {
 		SetSender(sender string)
-		SetReciever(to ...string)
+		SetReceiver(to ...string)
 		SetSubject(subject string)
 		SetBody(templateFileName string, data interface{}) error
 		Send() error
@@ -36,7 +36,7 @@ func (m *mail) SetSender(sender string) {
 	m.msg.SetHeader("From", sender)
 }
 
-func (m *mail) SetReciever(to ...string) {
+func (m *mail) SetReceiver(to ...string) {
 	m.msg.SetHeader("To", to...)
 }
 

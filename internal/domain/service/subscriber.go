@@ -28,10 +28,11 @@ func NewSubscriberService(natsIntance mq.Nats, logger zerolog.Logger, mail mail.
 }
 
 func (s *subscriberService) SendEmail(msg dto.MailNotificationMessage) error {
+	s.mail.SetSender(viper.GetString("mail.sender"))
+	s.mail.SetReceiver(msg.Receiver...)
+
 	if msg.MsgType == "welcome" {
-		s.mail.SetSender(viper.GetString("mail.sender"))
 		s.mail.SetSubject("Welcome to Dropboks!!")
-		s.mail.SetReciever(msg.Receiver...)
 		if err := s.mail.SetBody("welcome.html", struct {
 			Email string
 		}{
@@ -40,10 +41,32 @@ func (s *subscriberService) SendEmail(msg dto.MailNotificationMessage) error {
 			s.logger.Error().Err(err).Msg("error set body html")
 			return err
 		}
-		if err := s.mail.Send(); err != nil {
-			s.logger.Error().Err(err).Msg("error send email")
+	} else if msg.MsgType == "OTP" {
+
+		s.mail.SetSubject("OTP")
+		if err := s.mail.SetBody("otp.html", struct {
+			OTP string
+		}{
+			OTP: msg.Message,
+		}); err != nil {
+			s.logger.Error().Err(err).Msg("error set body html")
 			return err
 		}
+	} else if msg.MsgType == "verification" {
+		s.mail.SetSubject("Email Verification")
+		if err := s.mail.SetBody("verification.html", struct {
+			LINK string
+		}{
+			LINK: msg.Message,
+		}); err != nil {
+			s.logger.Error().Err(err).Msg("error set body html")
+			return err
+		}
+	}
+
+	if err := s.mail.Send(); err != nil {
+		s.logger.Error().Err(err).Msg("error send email")
+		return err
 	}
 	return nil
 }
