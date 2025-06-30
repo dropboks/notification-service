@@ -2,6 +2,8 @@ github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSV
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dropboks/sharedlib v0.0.0-20250624031638-a37fddbd1cf5 h1:43InE+DU9953FDKU0ey3Skl0tqgyxuCbE5Jyo5Sx15E=
 github.com/dropboks/sharedlib v0.0.0-20250624031638-a37fddbd1cf5/go.mod h1:tD3l/yU8Aj4v6vWf/d4FeJH7SfHk+54tgftz8uLTG2k=
+github.com/dropboks/sharedlib v0.0.0-20250630043536-7dcea1b26d60 h1:xyvN4klbkzSwy1+nKGJYm7sbzq7Sb0VIoAAHL5yuuJc=
+github.com/dropboks/sharedlib v0.0.0-20250630043536-7dcea1b26d60/go.mod h1:tD3l/yU8Aj4v6vWf/d4FeJH7SfHk+54tgftz8uLTG2k=
 github.com/fsnotify/fsnotify v1.9.0 h1:2Ml+OJNzbYCTzsxtv8vKSFD9PbJjmhYF14k/jKC7S9k=
 github.com/fsnotify/fsnotify v1.9.0/go.mod h1:8jBTzvmWwFyi3Pb8djgCCO5IBqzKJ/Jwo8TRcHyHii0=
 github.com/go-viper/mapstructure/v2 v2.3.0 h1:27XbWsHIqhbdR5TIC911OfYvgSaW93HM+dX7970Q7jk=

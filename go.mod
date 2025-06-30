@@ -3,6 +3,7 @@ module github.com/dropboks/notification-service
 go 1.24.2
 
 require (
+	github.com/dropboks/sharedlib v0.0.0-20250630043536-7dcea1b26d60
 	github.com/nats-io/nats.go v1.43.0
 	github.com/rs/zerolog v1.34.0
 	github.com/spf13/viper v1.20.1
@@ -11,7 +12,6 @@ require (
 )
 
 require (
-	github.com/dropboks/sharedlib v0.0.0-20250624031638-a37fddbd1cf5 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.3.0 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
