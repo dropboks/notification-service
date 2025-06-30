@@ -31,7 +31,8 @@ func (s *subscriberService) SendEmail(msg dto.MailNotificationMessage) error {
 	s.mail.SetSender(viper.GetString("mail.sender"))
 	s.mail.SetReceiver(msg.Receiver...)
 
-	if msg.MsgType == "welcome" {
+	switch msg.MsgType {
+	case "welcome":
 		s.mail.SetSubject("Welcome to Dropboks!!")
 		if err := s.mail.SetBody("welcome.html", struct {
 			Email string
@@ -41,8 +42,7 @@ func (s *subscriberService) SendEmail(msg dto.MailNotificationMessage) error {
 			s.logger.Error().Err(err).Msg("error set body html")
 			return err
 		}
-	} else if msg.MsgType == "OTP" {
-
+	case "OTP":
 		s.mail.SetSubject("OTP")
 		if err := s.mail.SetBody("otp.html", struct {
 			OTP string
@@ -52,8 +52,18 @@ func (s *subscriberService) SendEmail(msg dto.MailNotificationMessage) error {
 			s.logger.Error().Err(err).Msg("error set body html")
 			return err
 		}
-	} else if msg.MsgType == "verification" {
+	case "verification":
 		s.mail.SetSubject("Email Verification")
+		if err := s.mail.SetBody("verification.html", struct {
+			LINK string
+		}{
+			LINK: msg.Message,
+		}); err != nil {
+			s.logger.Error().Err(err).Msg("error set body html")
+			return err
+		}
+	case "changeEmail":
+		s.mail.SetSubject("Change Linked Email Verification")
 		if err := s.mail.SetBody("verification.html", struct {
 			LINK string
 		}{
