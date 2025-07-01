@@ -72,6 +72,16 @@ func (s *subscriberService) SendEmail(msg dto.MailNotificationMessage) error {
 			s.logger.Error().Err(err).Msg("error set body html")
 			return err
 		}
+	case "resetPassword":
+		s.mail.SetSubject("Reset Password")
+		if err := s.mail.SetBody("reset-password.html", struct {
+			LINK string
+		}{
+			LINK: msg.Message,
+		}); err != nil {
+			s.logger.Error().Err(err).Msg("error set body html")
+			return err
+		}
 	}
 
 	if err := s.mail.Send(); err != nil {
